@@ -51,10 +51,10 @@ func main() {
 	r := gin.Default()
 	r.Use(gin.ErrorLogger())
 	r.GET("/.well-known/lnurlp/:key", func(c *gin.Context) {
-		key := c.GetString("key")
+		key := c.Param("key")
 
-		alias := models.Alias{Key: key}
-		err := db.Model(&alias).Select()
+		alias := models.Alias{}
+		err := db.Model(&alias).Where("key = ?", key).Select()
 
 		if err != nil {
 			c.AbortWithError(400, err)
